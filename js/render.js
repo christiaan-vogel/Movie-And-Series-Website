@@ -17,9 +17,13 @@ export function renderBadge(text, type) {
 export function renderCard(item) {
   const title = item.series ? `${item.series} S${item.season}E${item.episode}` : item.title;
   const subtitle = item.series ? item.title : `${item.year || ''}`;
+  const poster = item.image 
+    ? `<img src="${item.image}" alt="${title}" class="card-poster" onerror="this.outerHTML='<div class=\\'card-poster\\'>${getInitials(title)}</div>'">`
+    : `<div class="card-poster">${getInitials(title)}</div>`;
   
   return `
     <div class="card" data-id="${item.title}-${item.year || ''}-${item.series || ''}">
+      ${poster}
       <div class="card-body">
         <h3 class="card-title">${title}</h3>
         <p class="card-meta">${subtitle}</p>
@@ -36,9 +40,11 @@ export function renderCard(item) {
 export function renderListRow(item) {
   const title = item.series ? `${item.series} S${item.season}E${item.episode}: ${item.title}` : item.title;
   const meta = [item.year, item.genres, item.rating ? `⭐ ${item.rating}` : ''].filter(Boolean).join(' • ');
-  
+  const poster = item.image || '';
+
   return `
     <div class="list-row" data-id="${item.title}-${item.year || ''}-${item.series || ''}">
+      ${poster ? `<img src="${poster}" alt="${title}">` : `<div style="width:60px;height:90px;background:var(--bg-elevated);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:bold;">${getInitials(title)}</div>`}
       <div class="list-row-content">
         <h3 class="list-row-title">${title}</h3>
         <p class="list-row-meta">${meta}</p>
@@ -85,8 +91,9 @@ export function renderModal(item) {
         <h2>${title}</h2>
       </div>
       <div class="modal-body">
+        ${item.image ? `<img src="${item.image}" alt="${title}" style="max-width:200px;float:left;margin-right:1rem;border-radius:8px;">` : ''}
         <p>${details}</p>
-        ${item.summary ? `<p style="margin-top:1rem;">${item.summary}</p>` : ''}
+        ${item.summary ? `<p style="clear:both;margin-top:1rem;">${item.summary}</p>` : ''}
       </div>
       <div class="modal-footer">
         ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener"><button>View on IMDb</button></a>` : ''}
