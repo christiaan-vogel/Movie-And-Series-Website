@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Movies and Series</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>⚙️ Admin Panel</h1>
+<div class="controls">
+      <button id="backBtn">← Back to Site</button>
+      <button id="importBtn">Import</button>
+      <button id="exportBtn">Export</button>
+      <button id="saveBtn" class="primary">Save to LocalStorage</button>
+      <button id="validateBtn">Validate</button>
+      <button id="logoutBtn">Logout</button>
+      <button id="themeToggle" title="Toggle light/dark">Theme</button>
+    </div>
+  </header>
+
+  <main style="max-width:1200px;margin:0 auto;">
+    <h2>Edit Data</h2>
+    <p style="color:var(--text-dim);">
+      Edit the data below. Each line represents one movie or episode. 
+      Format: <code style="background:var(--bg-elevated);padding:0.25rem 0.5rem;border-radius:4px;">key=value|key=value|...</code>
+    </p>
+    
+    <textarea id="rawData"></textarea>
+    
+    <div id="validation"></div>
+
+    <details style="margin-top:2rem;border:1px solid var(--border);padding:1rem;border-radius:var(--radius);">
+      <summary style="cursor:pointer;font-weight:600;">GitHub Integration (Optional)</summary>
+      <p style="color:var(--text-dim);margin-top:1rem;">
+        You can commit changes directly to GitHub. A personal access token with <code>repo</code> scope is required.
+        The token is stored only in your browser's localStorage and never sent elsewhere.
+      </p>
+      
+      <div style="display:grid;gap:1rem;margin-top:1rem;">
+        <div>
+          <label for="ghOwner">Owner:</label>
+          <input type="text" id="ghOwner" placeholder="Christiaan-Vogel" style="width:100%;margin-top:0.25rem;">
+        </div>
+        <div>
+          <label for="ghRepo">Repository:</label>
+          <input type="text" id="ghRepo" placeholder="Movie-And-Series-Website" style="width:100%;margin-top:0.25rem;">
+        </div>
+        <div>
+          <label for="ghBranch">Branch:</label>
+          <input type="text" id="ghBranch" value="main" style="width:100%;margin-top:0.25rem;">
+        </div>
+        <div>
+          <label for="ghPath">File Path:</label>
+          <input type="text" id="ghPath" value="data/data.txt" style="width:100%;margin-top:0.25rem;">
+        </div>
+        <div>
+          <label for="ghToken">Personal Access Token:</label>
+          <input type="password" id="ghToken" placeholder="ghp_..." style="width:100%;margin-top:0.25rem;">
+          <button id="toggleToken" style="margin-top:0.5rem;">Show/Hide</button>
+          <button id="clearToken" style="margin-top:0.5rem;">Clear Token</button>
+        </div>
+        <div>
+          <button id="testGH">Test Connection</button>
+          <button id="commitGH" class="primary">Commit to GitHub</button>
+        </div>
+      </div>
+      
+      <div id="ghStatus"></div>
+    </details>
+  </main>
+
+  <footer style="text-align:center;padding:2rem;color:var(--text-dim);">
+    <p>Use Export to download your changes • Save stores changes locally</p>
+  </footer>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

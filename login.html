@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Movies and Series</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .center { max-width: 420px; margin: 4rem auto; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .center h2 { margin-top: 0; }
+    .row { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔐 Login</h1>
+    <div class="controls">
+      <button id="backBtn">← Back</button>
+      <button id="themeToggle" title="Toggle light/dark">Theme</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="center">
+      <h2>Admin Access</h2>
+      <p style="color:var(--text-dim);">Enter the admin password to continue.</p>
+      <div class="row">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter password" autofocus>
+      </div>
+      <div class="row" style="display:flex; gap:0.5rem;">
+        <button id="loginBtn" class="primary" style="flex:1;">Login</button>
+        <button id="clearSession" style="flex:1;">Clear Session</button>
+      </div>
+      <div id="msg"></div>
+      <details style="margin-top:1rem;">
+        <summary>Change password (local only)</summary>
+        <div class="row" style="margin-top:0.5rem;">
+          <label for="newPwd">New password</label>
+          <input id="newPwd" type="password" placeholder="Set new password">
+        </div>
+        <button id="setPwd">Set Password</button>
+        <p style="color:var(--text-dim);margin-top:0.5rem;">Stored in your browser's localStorage. Default is <code>admin123</code>.</p>
+      </details>
+    </div>
+  </main>
+
+  <script type="module">
+    import { login, setPassword } from './js/auth.js';
+    import { initTheme, toggleTheme } from './js/theme.js';
+
+    initTheme();
+
+    const params = new URLSearchParams(location.search);
+    const redirect = params.get('redirect') || 'admin.html';
+
+    document.getElementById('themeToggle').addEventListener('click', () => toggleTheme());
+    document.getElementById('backBtn').addEventListener('click', () => history.length > 1 ? history.back() : location.href = 'index.html');
+
+    const msg = document.getElementById('msg');
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const pwd = document.getElementById('password').value;
+      const ok = login(pwd);
+      if (ok) {
+        msg.innerHTML = '<div class="success">✓ Logged in</div>';
+        location.href = redirect;
+      } else {
+        msg.innerHTML = '<div class="error">Invalid password</div>';
+      }
+    });
+
+    document.getElementById('setPwd').addEventListener('click', () => {
+      const np = document.getElementById('newPwd').value;
+      if (!np) { msg.innerHTML = '<div class="error">Enter a new password</div>'; return; }
+      setPassword(np);
+      msg.innerHTML = '<div class="success">✓ Password saved locally</div>';
+    });
+
+    document.getElementById('clearSession').addEventListener('click', () => {
+      sessionStorage.clear();
+      msg.innerHTML = '<div class="success">✓ Session cleared</div>';
+    });
+  </script>
+</body>
+</html>
